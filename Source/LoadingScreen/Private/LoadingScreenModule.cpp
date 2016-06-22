@@ -66,6 +66,9 @@ void FLoadingScreenModule::HandlePreLoadMap()
 		const ULoadingScreenSettings* Settings = GetDefault<ULoadingScreenSettings>();
 		BeginLoadingScreen(Settings->DefaultScreen);
 	}
+
+	// workaround for PreLoadMap call order issue
+	GetMoviePlayer()->PlayMovie();
 }
 
 void FLoadingScreenModule::HandlePostLoadMap()
