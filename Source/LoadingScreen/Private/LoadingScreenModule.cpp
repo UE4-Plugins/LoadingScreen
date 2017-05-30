@@ -66,6 +66,9 @@ void FLoadingScreenModule::ShutdownModule()
 	{
 		GetMoviePlayer()->OnPrepareLoadingScreen().RemoveAll(this);
 	}
+
+	// workaround for PreLoadMap call order issue
+	GetMoviePlayer()->PlayMovie();
 }
 
 void FLoadingScreenModule::HandlePrepareLoadingScreen()
