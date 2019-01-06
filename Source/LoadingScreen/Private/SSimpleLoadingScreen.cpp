@@ -1,4 +1,4 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "SSimpleLoadingScreen.h"
 
@@ -15,10 +15,7 @@
 #include "Engine/Texture2D.h"
 #include "Engine/UserInterfaceSettings.h"
 
-#define LOCTEXT_NAMESPACE "LoadingScreen"
-
-/////////////////////////////////////////////////////
-// SSimpleLoadingScreen
+#define LOCTEXT_NAMESPACE "FLoadingScreenModule"
 
 void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScreenDescription& InScreenDescription)
 {
@@ -32,32 +29,32 @@ void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScr
 	TSharedRef<SOverlay> Root = SNew(SOverlay);
 
 	// If there's an image defined
-	if ( InScreenDescription.Images.Num() > 0 )
+	if (InScreenDescription.Images.Num() > 0)
 	{
 		int32 ImageIndex = FMath::RandRange(0, InScreenDescription.Images.Num() - 1);
 		const FStringAssetReference& ImageAsset = InScreenDescription.Images[ImageIndex];
 		UObject* ImageObject = ImageAsset.TryLoad();
-		if ( UTexture2D* LoadingImage = Cast<UTexture2D>(ImageObject) )
+
+		if (UTexture2D* LoadingImage = Cast<UTexture2D>(ImageObject))
 		{
 			FVector2D Size = FVector2D(LoadingImage->GetSizeX(), LoadingImage->GetSizeY());
 			LoadingScreenBrush = MakeShareable(new FLoadingScreenBrush(LoadingImage, Size, FName(*ImageAsset.ToString())));
 
 			Root->AddSlot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				SNew(SScaleBox)
-				.Stretch(InScreenDescription.ImageStretch)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
 				[
-					SNew(SImage)
-					.Image(LoadingScreenBrush.Get())
-				]
-			];
+					SNew(SScaleBox).Stretch(InScreenDescription.ImageStretch)
+					[
+						SNew(SImage).Image(LoadingScreenBrush.Get())
+					]
+				];
 		}
 	}
 
 	TSharedRef<SWidget> TipWidget = SNullWidget::NullWidget;
-	if ( Settings->Tips.Num() > 0 )
+
+	if (Settings->Tips.Num() > 0)
 	{
 		int32 TipIndex = FMath::RandRange(0, Settings->Tips.Num() - 1);
 
@@ -67,7 +64,7 @@ void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScr
 			.Text(Settings->Tips[TipIndex]);
 	}
 
-	Root->AddSlot()
+Root->AddSlot()
 	.HAlign(HAlign_Fill)
 	.VAlign(VAlign_Bottom)
 	[
@@ -140,7 +137,7 @@ void SSimpleLoadingScreen::Tick(const FGeometry& AllottedGeometry, const double 
 	FIntPoint Size((int32)LocalSize.X, (int32)LocalSize.Y);
 	const float NewScale = GetDefault<UUserInterfaceSettings>()->GetDPIScaleBasedOnSize(Size);
 
-	if ( NewScale != LastComputedDPIScale )
+	if (NewScale != LastComputedDPIScale)
 	{
 		LastComputedDPIScale = NewScale;
 		SlatePrepass(1.0f);

@@ -1,19 +1,18 @@
 {
   "FileVersion": 3,
-
-  "Version": 1,
-  "VersionName": "1.0",
+  "Version": 2,
+  "VersionName": "1.1",
   "FriendlyName": "Loading Screen",
   "Description": "A simple loading screen plug-in.",
   "Category": "Loading",
   "CreatedBy": "Epic Games, Inc.",
   "CreatedByURL": "https://www.epicgames.com",
   "DocsURL": "https://github.com/ue4plugins/LoadingScreen",
+  "MarketplaceURL": "",
   "SupportURL": "https://github.com/ue4plugins/LoadingScreen/issues",
-  "EngineVersion": "4.20.0",
+  "EngineVersion": "4.21.0",
   "EnabledByDefault": false,
   "CanContainContent": true,
-
   "Modules": [
     {
       "Name": "LoadingScreen",

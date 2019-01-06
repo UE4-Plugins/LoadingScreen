@@ -1,4 +1,4 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -17,10 +17,11 @@ struct FLoadingScreenBrush : public FSlateDynamicImageBrush, public FGCObject
 
 	virtual void AddReferencedObjects(FReferenceCollector& Collector) override
 	{
-		UObject* Object = GetResourceObject();
-		if (Object)
+		UObject* ResourceObject = GetResourceObject();
+
+		if (ResourceObject)
 		{
-			Collector.AddReferencedObject(Object);
+			Collector.AddReferencedObject(ResourceObject);
 		}
 	}
 };
@@ -30,7 +31,6 @@ class SSimpleLoadingScreen : public SCompoundWidget
 public:
 
 	SLATE_BEGIN_ARGS(SSimpleLoadingScreen) {}
-
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, const FLoadingScreenDescription& ScreenDescription);
@@ -40,7 +40,7 @@ public:
 private:
 	float GetDPIScale() const;
 	
-private:
-	TSharedPtr<FLoadingScreenBrush> LoadingScreenBrush;
 	float LastComputedDPIScale;
+	
+	TSharedPtr<FLoadingScreenBrush> LoadingScreenBrush;
 };

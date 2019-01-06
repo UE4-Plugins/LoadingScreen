@@ -1,10 +1,10 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "LoadingScreenSettings.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/Font.h"
 
-#define LOCTEXT_NAMESPACE "LoadingScreen"
+#define LOCTEXT_NAMESPACE "FLoadingScreenModule"
 
 FLoadingScreenDescription::FLoadingScreenDescription()
 	: MinimumLoadingScreenDisplayTime(-1)
@@ -17,12 +17,11 @@ FLoadingScreenDescription::FLoadingScreenDescription()
 {
 }
 
-ULoadingScreenSettings::ULoadingScreenSettings(const FObjectInitializer& Initializer)
-	: Super(Initializer)
+ULoadingScreenSettings::ULoadingScreenSettings(const FObjectInitializer& Initializer) : Super(Initializer)
 {
 	TipWrapAt = 1000.0f;
 
-	if ( !IsRunningDedicatedServer() )
+	if (!IsRunningDedicatedServer())
 	{
 		static ConstructorHelpers::FObjectFinder<UFont> RobotoFontObj(TEXT("/Engine/EngineFonts/Roboto"));
 		TipFont = FSlateFontInfo(RobotoFontObj.Object, 20, FName("Normal"));

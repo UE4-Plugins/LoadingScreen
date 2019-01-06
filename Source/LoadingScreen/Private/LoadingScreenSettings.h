@@ -1,11 +1,10 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Fonts/SlateFontInfo.h"
 #include "SScaleBox.h"
-#include "MoviePlayer.h"
 #include "Engine/DeveloperSettings.h"
 
 #include "LoadingScreenSettings.generated.h"
@@ -20,22 +19,22 @@ struct LOADINGSCREEN_API FLoadingScreenDescription
 	/** The minimum time that a loading screen should be opened for, -1 if there is no minimum time. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Loading)
 	float MinimumLoadingScreenDisplayTime;
-	
+
 	/** If true, the loading screen will disappear as soon as loading is done. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Loading)
 	bool bAutoCompleteWhenLoadingCompletes;
-	
+
 	/** If true, movies can be skipped by clicking the loading screen as long as loading is done. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Loading)
 	bool bMoviesAreSkippable;
-	
+
 	/** If true, movie playback continues until Stop is called. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Loading)
 	bool bWaitForManualStop;
-	
+
 	/** Should we just play back, loop, etc.  NOTE: if playback type is MT_LoadingLoop, then MoviePlayer will auto complete when in the last movie and load finishes regardless of bAutoCompleteWhenLoadingCompletes */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Loading)
-	TEnumAsByte<EMoviePlaybackType> PlaybackType;
+	TEnumAsByte<enum EMoviePlaybackType> PlaybackType;
 
 	/** The movie paths local to the game's Content/Movies/ directory without extension. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movies)

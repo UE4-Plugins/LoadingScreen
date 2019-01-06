@@ -1,27 +1,26 @@
-// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
-namespace UnrealBuildTool.Rules
+using UnrealBuildTool;
+
+public class LoadingScreen : ModuleRules
 {
-	public class LoadingScreen : ModuleRules
-	{
-		public LoadingScreen(ReadOnlyTargetRules Target)
-            : base(Target)
-        {
-            PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+    public LoadingScreen(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-            PrivateIncludePaths.Add("LoadingScreen/Private");
+        PrivateIncludePaths.Add("LoadingScreen/Private");
 
-			PublicDependencyModuleNames.AddRange(
-				new string[]
-				{
-					"Core",
-					"CoreUObject",
-					"MoviePlayer",
-					"Slate",
-					"SlateCore",
-					"InputCore",
-					"Engine"
-				});
-		}
-	}
+        PublicDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "Core",
+                "CoreUObject",
+                "Engine",
+                "MoviePlayer",
+                "Slate",
+                "SlateCore",
+                "InputCore"
+            }
+        );
+    }
 }
