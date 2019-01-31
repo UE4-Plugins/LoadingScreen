@@ -80,6 +80,7 @@ void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScr
 			SNew(SSafeZone)
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Bottom)
+			.Padding(FMargin(25))
 			.IsTitleSafe(true)
 			[
 				SNew(SDPIScaler)
@@ -88,7 +89,7 @@ void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScr
 					SNew(SHorizontalBox)
 
 					+ SHorizontalBox::Slot()
-					.Padding(FMargin(25, 0.0f, 0, 0))
+					.Padding(FMargin(0))
 					.VAlign(VAlign_Center)
 					.AutoWidth()
 					[
@@ -98,7 +99,7 @@ void SSimpleLoadingScreen::Construct(const FArguments& InArgs, const FLoadingScr
 					]
 
 					+ SHorizontalBox::Slot()
-					.Padding(FMargin(40.0f, 0.0f, 0, 0))
+					.Padding(FMargin(LoadingFont.Size * 0.5, 0.0f, 0, 0))
 					.AutoWidth()
 					.VAlign(VAlign_Center)
 					[
