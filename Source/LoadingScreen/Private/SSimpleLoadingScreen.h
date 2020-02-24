@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "SCompoundWidget.h"
+#include "Widgets/SCompoundWidget.h"
 #include "LoadingScreenSettings.h"
 
 class FDeferredCleanupSlateBrush;
