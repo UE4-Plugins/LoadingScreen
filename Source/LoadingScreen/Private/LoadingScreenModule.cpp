@@ -23,7 +23,11 @@ public:
 private:
 	void HandlePrepareLoadingScreen();
 
-	void BeginLoadingScreen(const FLoadingScreenDescription& ScreenDescription);
+	void HandleMovieClipFinished(const FString& FinishedClip);
+
+	void BeginLoadingScreen(const FLoadingScreenDescription& ScreenDescription);	
+
+	TSharedPtr<class SSimpleLoadingScreen> WidgetLoadingScreen;
 };
 
 IMPLEMENT_MODULE(FLoadingScreenModule, LoadingScreen)
@@ -43,15 +47,15 @@ void FLoadingScreenModule::StartupModule()
 		{
 			Ref.TryLoad();
 		}
-
 		for ( const FStringAssetReference& Ref : Settings->DefaultScreen.Images )
 		{
 			Ref.TryLoad();
 		}
 
 		if ( IsMoviePlayerEnabled() )
-		{
-			GetMoviePlayer()->OnPrepareLoadingScreen().AddRaw(this, &FLoadingScreenModule::HandlePrepareLoadingScreen);
+		{			
+			// Binds the delegate to auto fire the loading screen code when a level changes and when a movie finishes
+			GetMoviePlayer()->OnPrepareLoadingScreen().AddRaw(this, &FLoadingScreenModule::HandlePrepareLoadingScreen);			
 		}
 
 		// Prepare the startup screen, the PrepareLoadingScreen callback won't be called
@@ -64,6 +68,10 @@ void FLoadingScreenModule::ShutdownModule()
 {
 	if ( !IsRunningDedicatedServer() )
 	{
+		if (WidgetLoadingScreen)
+		{
+			WidgetLoadingScreen.Reset();
+		}				
 		GetMoviePlayer()->OnPrepareLoadingScreen().RemoveAll(this);
 	}
 }
@@ -74,8 +82,31 @@ void FLoadingScreenModule::HandlePrepareLoadingScreen()
 	BeginLoadingScreen(Settings->DefaultScreen);
 }
 
+void FLoadingScreenModule::HandleMovieClipFinished(const FString & FinishedClip)
+{
+	// If its not the last movie then try keep waiting
+	if (!GetMoviePlayer()->IsLastMovieInPlaylist())
+	{
+		return;
+	}
+
+	// Unbind the delegate so we're not firing this multiple times
+	GetMoviePlayer()->OnMovieClipFinished().RemoveAll(this);
+	
+	// Show the loading screen widget	
+	if (WidgetLoadingScreen)
+	{
+		WidgetLoadingScreen->HandleMoviesFinishedPlaying();
+	}
+}
+
 void FLoadingScreenModule::BeginLoadingScreen(const FLoadingScreenDescription& ScreenDescription)
 {
+	if (WidgetLoadingScreen)
+	{
+		WidgetLoadingScreen.Reset();
+	}
+
 	FLoadingScreenAttributes LoadingScreen;
 	LoadingScreen.MinimumLoadingScreenDisplayTime = ScreenDescription.MinimumLoadingScreenDisplayTime;
 	LoadingScreen.bAutoCompleteWhenLoadingCompletes = ScreenDescription.bAutoCompleteWhenLoadingCompletes;
@@ -83,13 +114,44 @@ void FLoadingScreenModule::BeginLoadingScreen(const FLoadingScreenDescription& S
 	LoadingScreen.bWaitForManualStop = ScreenDescription.bWaitForManualStop;
 	LoadingScreen.MoviePaths = ScreenDescription.MoviePaths;
 	LoadingScreen.PlaybackType = ScreenDescription.PlaybackType;
-	
-	if ( ScreenDescription.bShowUIOverlay )
+
+
+	if (ScreenDescription.bShowWidget)
 	{
-		LoadingScreen.WidgetLoadingScreen = SNew(SSimpleLoadingScreen, ScreenDescription);
+		// Create and store widget
+		WidgetLoadingScreen = SNew(SSimpleLoadingScreen, ScreenDescription)
+			.bShowThrobber(ScreenDescription.Throbber.bShowThrobber)
+			.ThrobberType(ScreenDescription.Throbber.ThrobberType)
+			;
+		LoadingScreen.WidgetLoadingScreen = WidgetLoadingScreen;
 	}
 
+	const bool IsPlayingValidMovies = LoadingScreen.MoviePaths.Num() != 0;
+	// Incase we have no movie paths, this will force it to show the loading screen anyway
+	if (!IsPlayingValidMovies)
+	{
+		// Forces the movie player to create a movie streamer to actually show the widget and such
+		LoadingScreen.MoviePaths.Add("");			
+	}
+	// If we have movies to show, then setup what happens if we're supposed to show ui otherwise skip this
+	else
+	{
+		// Edgecase
+		GetMoviePlayer()->OnMovieClipFinished().RemoveAll(this);
+		
+		GetMoviePlayer()->OnMovieClipFinished().AddRaw(this, &FLoadingScreenModule::HandleMovieClipFinished);
+	}	
+
+	// This happens last after everything has been prepared ahead of time
 	GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+
+	if (!IsPlayingValidMovies)
+	{
+		if (WidgetLoadingScreen)
+		{
+			WidgetLoadingScreen->HandleMoviesFinishedPlaying();
+		}
+	}
 }
 
 

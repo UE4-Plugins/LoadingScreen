@@ -12,10 +12,11 @@ The LoadingScreen plug-in implements a module that allows you to configure a sim
 Loading Screen system in the engine.  To goal is to make it more customizable over 
 time to avoid needing to write a new loading screen manually.
 
+This is based off of Nick Darnell's version of the plugin which you can find [HERE](https://github.com/ue4plugins/LoadingScreen)
 
 ## Supported Platforms
 
-This plug-in was last built against **Unreal Engine 4.22**. It works on all platforms (probably).
+This plug-in was last built against **Unreal Engine 4.23**. It works on all platforms (probably).
 
 
 ## Dependencies
@@ -39,9 +40,9 @@ The plug-in configured to be enabled by default once it's in your game's plug-in
 
 **Note: This plugin is not supported by Epic Games.**
 
-Please [file an issue](https://github.com/nickdarnell/LoadingScreen/issues),
-submit a [pull request](https://github.com/nickdarnell/LoadingScreen/pulls?q=is%3Aopen+is%3Apr)
-or hit me up on twitter [@NickDarnell](https://twitter.com/NickDarnell)
+Please [file an issue](https://github.com/Oldsiren/LoadingScreen/issues),
+submit a [pull request](https://github.com/Oldsiren/LoadingScreen/pulls)
+or hit me up on twitter [@Oldsiren](https://twitter.com/oldsiren)
 
 
 ## References

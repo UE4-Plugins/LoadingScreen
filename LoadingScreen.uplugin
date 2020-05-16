@@ -10,7 +10,6 @@
   "CreatedByURL": "https://www.epicgames.com",
   "DocsURL": "https://github.com/ue4plugins/LoadingScreen",
   "SupportURL": "https://github.com/ue4plugins/LoadingScreen/issues",
-  "EngineVersion": "4.22",
   "EnabledByDefault": true,
   "CanContainContent": true,
 
